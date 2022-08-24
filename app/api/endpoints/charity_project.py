@@ -44,8 +44,7 @@ async def get_all_charity_projects(
         session: AsyncSession = Depends(get_async_session),
 ):
     """Получить список всех проектов."""
-    projects = await charity_project_crud.get_multi(session)
-    return projects
+    return await charity_project_crud.get_multi(session)
 
 
 @router.patch(
@@ -77,10 +76,8 @@ async def partially_update_charity_project(
         )
         if project_is_full:
             await close(project)
-    project = await charity_project_crud.update(
-        db_project=project, project_in=obj_in, session=session
-    )
-    return project
+
+    return await charity_project_crud.update(project, obj_in, session)
 
 
 @router.delete(
@@ -93,13 +90,7 @@ async def remove_charity_project(
         session: AsyncSession = Depends(get_async_session)
 ):
     """Удаление проекта. Только для суперпользователей."""
-    project = await CharityProjectValidator.get_if_exists(
-        project_id, session,
-    )
+    project = await CharityProjectValidator.get_if_exists(project_id, session)
     await CharityProjectValidator.check_project_is_donated(project)
-    await charity_project_crud.delete(project, session)
-    project = await charity_project_crud.delete(
-        project, session,
-    )
 
-    return project
+    return await charity_project_crud.delete(project, session)
