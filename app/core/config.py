@@ -4,7 +4,7 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     app_title: str = 'Благотворительный фонд поддержки котиков QRKot'
     app_description: str = 'Помогаем котикам'
-    database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
+    database_url: str = 'sqlite+aiosqlite:///./qr_cat.db'
     secret: str = 'SECRET'
     token_lifetime = 3600
 
